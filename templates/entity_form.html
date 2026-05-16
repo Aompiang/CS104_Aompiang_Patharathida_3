@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card card-fun p-4">
+  <h2 class="mb-4">{{ title }}</h2>
+  <form method="post">
+    <div class="row g-3">
+      {% for field in fields %}
+        <div class="col-md-{{ field.col|default('6') }}">
+          <label class="form-label">{{ field.label }}</label>
+          {% if field.type == 'textarea' %}
+            <textarea name="{{ field.name }}" class="form-control" rows="3" {% if field.required %}required{% endif %}>{{ item[field.name] if item and item[field.name] is not none else '' }}</textarea>
+          {% elif field.type == 'select' %}
+            <select name="{{ field.name }}" class="form-select" {% if field.required %}required{% endif %}>
+              <option value="">เลือก {{ field.label }}</option>
+              {% for option in field.options %}
+                <option value="{{ option.value }}" {% if item and item[field.name] == option.value %}selected{% endif %}>{{ option.label }}</option>
+              {% endfor %}
+            </select>
+          {% else %}
+            <input type="{{ field.type }}" name="{{ field.name }}" class="form-control" value="{{ item[field.name] if item and item[field.name] is not none else field.default|default('') }}" {% if field.required %}required{% endif %} {% if field.min is defined %}min="{{ field.min }}"{% endif %} {% if field.step is defined %}step="{{ field.step }}"{% endif %}>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+    <div class="mt-4">
+      <button type="submit" class="btn btn-primary">{{ submit_label }}</button>
+      <a href="{{ request.referrer or url_for('index') }}" class="btn btn-secondary">ยกเลิก</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

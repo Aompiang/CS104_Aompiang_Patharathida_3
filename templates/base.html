@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pet Shop Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      body {
+        background: radial-gradient(circle at top left, #ffecd2, #fcb69f 40%, #ffe5f1 100%);
+        min-height: 100vh;
+      }
+      .navbar-brand {
+        font-weight: 800;
+        letter-spacing: 1px;
+      }
+      .menu-banner {
+        background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 48%, #fad0c4 100%);
+        border-radius: 24px;
+      }
+      .pet-thumb {
+        width: 100px;
+        height: 75px;
+        object-fit: cover;
+        border-radius: 12px;
+        border: 2px solid #fff;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      }
+      .card-fun {
+        border-radius: 24px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      }
+      .hero-title {
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+      }
+      .btn-primary {
+        background: #ff6f91;
+        border-color: #ff6f91;
+      }
+      .btn-primary:hover {
+        background: #ff4f79;
+        border-color: #ff4f79;
+      }
+      .count-badge {
+        background: #ffd166;
+        color: #4a2006;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-gradient shadow-sm mb-4" style="background: linear-gradient(90deg, #ff7e5f, #feb47b);">
+      <div class="container">
+        <a class="navbar-brand" href="{{ url_for('index') }}">Pet Shop</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('menu') }}">Menu</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}">สัตว์เลี้ยง</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('categories') }}">ประเภท</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('suppliers') }}">ผู้จัดหา</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('customers') }}">ลูกค้า</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('sales') }}">การขาย</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container mb-5">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show rounded-4" role="alert">
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      {% block content %}{% endblock %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

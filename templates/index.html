@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h1 class="display-6 hero-title">รายการสัตว์เลี้ยง</h1>
+    <p class="text-muted">แสดงสัตว์เลี้ยงพร้อมรูปภาพ และแก้ไขข้อมูลได้ทุกตัว</p>
+  </div>
+  <a href="{{ url_for('create_pet') }}" class="btn btn-primary btn-lg">เพิ่มสัตว์เลี้ยงใหม่</a>
+</div>
+
+<div class="row gy-4">
+  {% for pet in pets %}
+  <div class="col-lg-6">
+    <div class="card card-fun p-3">
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <img src="{{ pet['photo_url'] or default_photo_url }}" alt="{{ pet['name'] }}" class="pet-thumb">
+        </div>
+        <div class="col">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <h5 class="mb-1">{{ pet['name'] }}</h5>
+              <div class="text-muted">ประเภท: {{ pet['category_name'] or '-' }}</div>
+              <div class="text-muted">ผู้จัดหา: {{ pet['supplier_name'] or '-' }}</div>
+            </div>
+            <span class="badge count-badge">{{ pet['status'] }}</span>
+          </div>
+          <p class="mb-1">{{ pet['description'] or 'ไม่มีคำอธิบายเพิ่มเติม' }}</p>
+          <div class="small text-muted">อายุ {{ pet['age_months'] }} เดือน · ราคา {{ '%.2f'|format(pet['price']) }} บาท</div>
+        </div>
+      </div>
+      <div class="mt-3 text-end">
+        <a href="{{ url_for('edit_pet', pet_id=pet['pet_id']) }}" class="btn btn-sm btn-outline-primary me-2">แก้ไข</a>
+        <form action="{{ url_for('delete_pet', pet_id=pet['pet_id']) }}" method="post" class="d-inline-block" onsubmit="return confirm('ต้องการลบสัตว์เลี้ยงนี้หรือไม่?');">
+          <button type="submit" class="btn btn-sm btn-outline-danger">ลบ</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <div class="col-12 text-center py-5">
+    <h4>ยังไม่มีข้อมูลสัตว์เลี้ยง</h4>
+    <p class="text-muted">คลิกปุ่มด้านบนเพื่อเพิ่มสัตว์เลี้ยงใหม่</p>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

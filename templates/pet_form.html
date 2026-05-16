@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+  <div class="col-lg-8">
+    <div class="card card-fun p-4">
+      <h2 class="mb-4">{{ action }} สัตว์เลี้ยง</h2>
+      <form method="post">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">ชื่อสัตว์เลี้ยง</label>
+            <input type="text" name="name" class="form-control" value="{{ pet['name'] if pet else '' }}" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">ประเภท</label>
+            <select name="category_id" class="form-select" required>
+              <option value="">เลือกประเภท</option>
+              {% for category in categories %}
+              <option value="{{ category['category_id'] }}" {% if pet and pet['category_id'] == category['category_id'] %}selected{% endif %}>{{ category['name'] }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">ผู้จัดหา</label>
+            <select name="supplier_id" class="form-select" required>
+              <option value="">เลือกผู้จัดหา</option>
+              {% for supplier in suppliers %}
+              <option value="{{ supplier['supplier_id'] }}" {% if pet and pet['supplier_id'] == supplier['supplier_id'] %}selected{% endif %}>{{ supplier['name'] }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">อายุ (เดือน)</label>
+            <input type="number" name="age_months" class="form-control" min="0" value="{{ pet['age_months'] if pet else '0' }}" required>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">ราคา (บาท)</label>
+            <input type="number" step="0.01" name="price" class="form-control" min="0" value="{{ pet['price'] if pet else '0.00' }}" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">สถานะ</label>
+            <select name="status" class="form-select">
+              {% set status_value = pet['status'] if pet else 'Available' %}
+              <option value="Available" {% if status_value == 'Available' %}selected{% endif %}>Available</option>
+              <option value="Reserved" {% if status_value == 'Reserved' %}selected{% endif %}>Reserved</option>
+              <option value="Sold" {% if status_value == 'Sold' %}selected{% endif %}>Sold</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">สี</label>
+            <input type="text" name="color" class="form-control" value="{{ pet['color'] if pet else '' }}">
+          </div>
+          <div class="col-12">
+            <label class="form-label">คำอธิบาย</label>
+            <textarea name="description" class="form-control" rows="3">{{ pet['description'] if pet else '' }}</textarea>
+          </div>
+          <div class="col-12">
+            <label class="form-label">URL รูปภาพ</label>
+            <input type="text" name="photo_url" class="form-control" value="{{ pet['photo_url'] if pet else '' }}">
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <button type="submit" class="btn btn-primary">{{ action }}</button>
+          <a href="{{ url_for('index') }}" class="btn btn-secondary">ยกเลิก</a>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="card card-fun p-3">
+      <h5 class="mb-3">รูปภาพตัวอย่าง</h5>
+      {% if pet and pet['photo_url'] %}
+        <img src="{{ pet['photo_url'] }}" class="img-fluid rounded-4 mb-3" alt="รูปสัตว์เลี้ยง">
+      {% else %}
+        <img src="https://via.placeholder.com/400x250.png?text=Pet+Preview" class="img-fluid rounded-4 mb-3" alt="ตัวอย่างรูป">
+      {% endif %}
+      <p class="text-muted">วาง URL รูปภาพเพื่อให้แสดงภาพสัตว์เลี้ยงในหน้ารายการ</p>
+      <p class="small">ตัวอย่างรูปภาพที่ใช้งานได้: https://loremflickr.com/320/240/dog</p>
+    </div>
+  </div>
+</div>
+{% endblock %}
